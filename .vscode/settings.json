@@ -3,6 +3,8 @@
         "text_encoding": "cpp",
         "typeinfo": "cpp",
         "type_traits": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "algorithm": "cpp",
+        "format": "cpp"
     }
 }
