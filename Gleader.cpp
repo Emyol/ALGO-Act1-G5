@@ -6,6 +6,7 @@ TO DO
 Link ARRAY and LINK LIST (goods na ata?)
 DISPLAY DESIGN
 FILE HANDLING
+ERROR HANDLING for inputs
 
 */
 
@@ -27,11 +28,11 @@ struct Node {
 };
 Node* head = NULL;
 
-void addRecord(string name, int score);
+void push(string name, int score);
 void displayScore();//temporary
 
 //prio queue implementation, prio of highest number is always 1, incrementing.
-void addRecord(string name, int score){ 
+void push(string name, int score){ 
 Node* tmp = new Node(name, score);
 
 if(!head){
@@ -103,16 +104,19 @@ void displayScore(){
 		}
 
 	cout << "ARRAY Content: \n";
-		p = head;
-		count = 0;
+	p = head;
+	i = 1;
 		for (int j = 0; j < MAX; j++){
 			if (p){
-				cout << "Rank "<< rank << " " << p->name << " (" << LEAD[j] << ")" <<endl;
+				cout << "Rank "<< rank << " " << p->name << " (" << LEAD[j] << ")" << endl;
 					if (p && p->next->score == p->score){
-						rank--;
+					 //skip rank increment
+					} else{
+						rank += i;
+						i = 0;
 					}
 				p = p->next;
-				rank++;
+				i++;
 			} else{
 				break;
 			}
@@ -121,28 +125,30 @@ void displayScore(){
 
 int main(){
 	//tests
-	addRecord("Jule", 5); // prio = 1
-	addRecord("Fac", 3);
-	addRecord("You", 1);
-	addRecord("C", 5);
-	addRecord("Ferd", 6);
-    addRecord("Ferd", 21);
-    addRecord("Ferd", 18);
-    addRecord("Ferd", 2);
-    addRecord("Ferd", 7);
-	addRecord("Test", 12);
-	addRecord("Hadj", 16);
-	addRecord("Des", 31);
-	addRecord("Charl", 81);
-	addRecord("Carl", 57);
-	addRecord("Adrian",32);
-	addRecord("Sup", 4);
-	addRecord("Hello", 101);
-	addRecord("Its", 8);
-	addRecord("Me", 10);
+	push("Jule", 5); // prio = 1
+	push("Fac", 3);
+	push("You", 1);
+	push("C", 5);
+	push("Ferd", 6);
+    push("Ferd", 21);
+    push("Ferd", 18);
+    push("Ferd", 2);
+    push("Ferd", 7);
+	push("Test", 12);
+	push("Hadj", 16);
+	push("Des", 31);
+	push("Charl", 101);
+	push("Carl", 101);
+	push("Adrian",32);
+	push("Sup", 4);
+	push("Hello", 101);
+	push("Its", 101);
+	push("Me", 16);
 
 	displayScore();
 
+	push("Charl", 102);
+	displayScore();
 	return 0;
 }
 
