@@ -13,12 +13,15 @@ ERROR HANDLING for inputs
 
 #include <iostream>
 #include <fstream>
-#include <string>
+
+#include <iomanip>
+#include <cctype>
 using namespace std;
 
 const int MAX = 10;
 int LEADScore[MAX]; //array for top 10 leaderboard
 string LEADName[MAX];
+int playerCount = 0;
 
 //linked list
 struct Node {
@@ -31,15 +34,34 @@ struct Node {
 };
 Node* head = NULL;
 
+class InvalidInputException : public exception {
+public:
+    const char* what() const noexcept override {
+        return "Invalid input.";
+    }
+};
+
 //prototypes
 void push(string name, int score);
 void displayScore();//temporary
+bool checkIfPlayerExists(string name);
 void saveFile();
 void loadFile();
+void GUI();
+//design functions;
+void dSpace();
+void CLS();
 
 //prio queue implementation, prio of highest number is always 1, incrementing.
-void push(string name, int score){ 
+void push(string name, int score, int flag){ 
 Node* tmp = new Node(name, score);
+
+bool updatePlayer = false;
+bool verify = false;
+
+if (flag == 1) {
+	updatePlayer = true;
+}
 
 if(!head){
 	head = tmp;
@@ -50,11 +72,44 @@ if(!head){
 	//check if existing, removes node.
 	while(cur){
 		if(tmp->name == cur->name){
-			if(prev){
-				prev->next = cur->next;
-			} else {
-				head = cur->next;
+			if (updatePlayer == true) {
+				verify = true;
+		} else {
+			char choice;
+			cout << "Player " << name << " already has an existing record.\n";
+			cout << "Do you wish to update (Y/N)?: ";
+
+			while (true) {
+			try {
+				cin >> choice;
+
+				if (cin.fail() || cin.peek() != '\n' || !isalpha(choice)) {
+					throw InvalidInputException();
+				}
+				break;
+			} catch (const InvalidInputException &e) {
+				cout << e.what() << endl;
+				cin.ignore(10000, '\n');
 			}
+    	}
+				if(choice == 'Y' || choice == 'y') {
+					verify = true;
+				} else if (choice == 'N' || choice == 'n') {
+					verify = false;
+					cout << "Returning to main menu...\n";
+					return;
+				} else {
+					cout << "Invalid choice, returning to menu...\n";
+					verify = false;
+					return;
+				}
+		}
+
+		if(prev){
+			prev->next = cur->next;
+		} else {
+			head = cur->next;
+				}
 		break;
 		}
 		prev = cur;
@@ -88,47 +143,65 @@ if(!head){
             }
             temp = temp->next;
         }
-
-
 	}
+
+	// add to leaderboard array
+    Node* p = head;
+    int i = 0;
+    while (p != NULL && i < MAX) {
+        LEADScore[i] = p->score;
+        LEADName[i] = p->name;
+        ++i;
+        p = p->next;
+		playerCount++;
+    }
 }
 
-//for testing
+//for displaying leaderboards
 void displayScore(){
-	int count = 1, i = 0, rank = 1;
+	bool recordExists = false;
+	int i = 0, rank = 1;
 	Node *p;
 		p = head;
-		while (p!=NULL){
-			//saving top 10 scores to array (di pako certain kung ano restrictions sa top 10)
-			LEADScore[i] = p->score;
-			LEADName[i] = p->name;
-				if (count == 10){
-					break;
-				}
-			++i;
-			++count;
-			p = p->next;
+		
+		//check if there are records
+		if(p!=NULL){
+			recordExists = true;
+		} else {
+			cout << "No records currently exists...\n";
+			cout << "Leaderboards unavailable...\n";
+			cout << "Returning to main menu...\n";
+			return;
 		}
 
-	cout << "ARRAY Content: \n";
+    dSpace();
+    cout << setw(18) << "PLAYER NAME" << setw(10) << " || " << setw(15) << "SCORE" << endl;
+    dSpace();
 	p = head;
 	i = 1;
-		for (int j = 0; j < MAX; j++){
-			if (p){
-				cout << "Rank "<< rank << " " << LEADName[j] << " (" << LEADScore[j] << ")" << endl;
-					if (p && p->next->score == p->score){
-					 //skip rank increment
-					} else{
-						rank += i;
-						i = 0;
-					}
-				p = p->next;
-				i++;
-			} else{
-				break;
-			}
-		}
-		saveFile();
+	
+	     
+    for (int j = 0; j < MAX; j++) {  
+        if (LEADName[j] != "") { 
+            cout << "Rank " << setw(2) << rank << ": "
+                 << setw(30) << left << LEADName[j]
+                 << "  " << setw(1) << right << LEADScore[j] << endl;
+
+            if (j < playerCount - 1 && LEADScore[j] == LEADScore[j + 1]) {  
+                //skip iteration
+            } else {
+                rank += i;
+				i = 0;  
+            }
+        }
+		i++;
+    }
+
+
+	cout <<"Press Enter to continue...";
+	cin.ignore();
+	cin.get();
+	CLS();
 }
 
 void saveFile(){
@@ -148,29 +221,186 @@ void saveFile(){
 }
 
 void loadFile(){
+	bool check = false;
+
 	ifstream file("leaderboard.txt");
 	for(int i = 0; i<MAX; i++){
-		file >> LEADName[i] >> LEADScore[i];
+		if(file >> LEADName[i] >> LEADScore[i]){
+			check = true;
+		} else {	
+			break;
+		}
 	}
 	file.close();
 
 	ifstream rec("record.txt");
 	string name;
 	int score;
+	
+ 	while (getline(rec, name)) { 
+        size_t pos = name.find_last_of(" "); 
+        if (pos != string::npos) {
+            string tempName = name.substr(0, pos); 
+            int tempScore = stoi(name.substr(pos + 1)); 
 
-	while (rec >> name >> score) {
-		push(name, score);
-	}
-
+            push(tempName, tempScore, 1);
+        }
+    }
 	rec.close();
 
+	if (check){
+		cout << "Leaderboards loaded successfully\n";
+	}
 }
+
+void GUI(){
+	loadFile(); //initialize saved data
+
+	while (1){
+		char choice;
+		string validInput;
+
+		dSpace();
+		cout << setw(40) << "GAME LEADERBOARDS SYSTEM\n";
+		dSpace();
+		cout <<"A. ADD NEW SCORE\n";
+		cout <<"B. UPDATE EXISTING SCORE\n";
+		cout <<"C. LEADERBOARDS\n";
+		cout <<"D. SAVE LEADERBOARDS\n";
+		cout <<"E. EXIT\n";
+		dSpace();
+		cout <<"Your Choice: ";
+
+		while (true) {
+			try {
+				cin >> choice;
+
+				if (cin.fail() || cin.peek() != '\n' || !isalpha(choice)) {
+					throw InvalidInputException();
+				}
+				break;
+			} catch (const InvalidInputException &e) {
+				cout << e.what() << endl;
+				cin.ignore(10000, '\n');
+			}
+    	}
+
+		choice = toupper(choice);
+		switch (choice){
+			case 'A': {
+				string pName;
+				int pScore;
+
+				cout << "Enter Player Name: ";
+				cin.ignore();
+				getline(cin,pName);
+
+				cout << "Enter Score: ";
+					while (true) {
+						try {
+						cin >> pScore;
+
+						if (cin.fail()){
+							throw InvalidInputException();
+						}
+						break;
+					} catch (const InvalidInputException &e){
+						cout << e.what() << endl;
+						cin.clear();
+						cin.ignore(10000, '\n');
+					}
+				}
+				push(pName, pScore, 0);
+				cout << "Record for " << pName << " Successfully added!...\n";
+			break;
+			}
+			case 'B':
+			{
+				string pName;
+				int pScore;
+
+				cout << "Enter Player Name: ";
+				cin.ignore();
+				getline(cin,pName);
+
+				if(checkIfPlayerExists(pName)){
+					//proceed
+				} else {
+					cout << "No record with player " << pName <<" found...\n";
+					cout << "Returning to main menu\n";
+					break;
+				}
+
+				cout << "Enter New Score: ";
+					while (true) {
+						try {
+						cin >> pScore;
+
+						if (cin.fail()){
+							throw InvalidInputException();
+						}
+						break;
+					} catch (const InvalidInputException &e){
+						cout << e.what() << endl;
+						cin.clear();
+						cin.ignore(10000, '\n');
+					}
+				}
+				push(pName, pScore, 1);
+				cout << "Record for " << pName << " Successfully updated!...\n";
+			break;
+			}
+			case 'C':
+				displayScore();
+			break;
+			case 'D':
+				cout <<"Saving leaderboards...\n";
+				saveFile();
+				cout <<"Sucessfully saved!...\n";
+				cout <<"Press Enter to continue...";
+				cin.ignore();
+				cin.get();
+				CLS();
+			break;
+			case 'E':
+				cout <<"Thank you! Exiting...\n";
+				return;
+			break;
+			default:
+				cout << "Please Enter letters A-E\n";
+		}
+	}
+}
+
+bool checkIfPlayerExists(string name){
+	Node *tmp = head;
+
+	while(tmp){
+		if(tmp->name == name){
+			return true;
+		}
+	tmp = tmp->next;
+	}
+	return false;
+}
+
+
 
 int main(){
 	//tests
-	loadFile();
-	displayScore();
-
+	GUI();
 	return 0;
 }
 
+void CLS(){
+	for (int i = 0; i < 50; i++){
+		cout << endl;
+	}
+}
+
+void dSpace(){
+	for (int i = 0; i < 57; i++){
+		cout << "=";
+	}
+	cout << endl;
+}

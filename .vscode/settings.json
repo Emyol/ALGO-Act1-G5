@@ -5,6 +5,11 @@
         "type_traits": "cpp",
         "ostream": "cpp",
         "algorithm": "cpp",
-        "format": "cpp"
+        "format": "cpp",
+        "iosfwd": "cpp",
+        "iostream": "cpp",
+        "iomanip": "cpp",
+        "limits": "cpp",
+        "string": "cpp"
     }
 }
