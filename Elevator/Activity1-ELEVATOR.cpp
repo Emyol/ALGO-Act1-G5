@@ -322,7 +322,7 @@ void move() {
             delete user;
         }
 
-        // Check if Movement (priority queue) is empty
+        // Check if Movement (priority queue) is empty, add the front of the Users queue to the priority queue to ready the next target location.
         if (Movement.isEmpty()) {
                 //move to next location
             if (!Users.isEmpty()) {
@@ -334,7 +334,7 @@ void move() {
                 break;
             }
         }
-        //create a target location based on priority queue
+        //If movement (priority queue) is not empty, create a target location based on priority queue
         Node* targetNode = Movement.front();
         int targetFloor = targetNode->floorlvl;
 
