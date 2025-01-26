@@ -302,19 +302,32 @@ void GUI(){
 
 				cout << "Enter Score: ";
 					while (true) {
-						try {
-						cin >> pScore;
+						string input;
+						cin >> input;
 
-						if (cin.fail()){
-							throw InvalidInputException();
+						bool checkValid = true;
+						for (char c : input){
+							if (!isdigit(c)){
+								checkValid = false;
+								break;
+							}
 						}
-						break;
-					} catch (const InvalidInputException &e){
+						if (checkValid){
+						try{
+							pScore = stoi(input);
+							break;		
+						} catch (const InvalidInputException &e){
 						cout << e.what() << endl;
 						cin.clear();
 						cin.ignore(10000, '\n');
 					}
+				} else {
+					cout << "Invalid input. Try again: ";
+					cin.clear();
+					cin.ignore(10000, '\n');
 				}
+			}
+
 				push(pName, pScore, 0);
 				if (trackUP == 1) {
 				cout << "Record for " << pName << " Successfully updated!...\n";
@@ -344,19 +357,31 @@ void GUI(){
 
 				cout << "Enter New Score: ";
 					while (true) {
-						try {
-						cin >> pScore;
+						string input;
+						cin >> input;
 
-						if (cin.fail()){
-							throw InvalidInputException();
+						bool checkValid = true;
+						for (char c : input){
+							if (!isdigit(c)){
+								checkValid = false;
+								break;
+							}
 						}
-						break;
-					} catch (const InvalidInputException &e){
+						if (checkValid){
+						try{
+							pScore = stoi(input);
+							break;		
+						} catch (const InvalidInputException &e){
 						cout << e.what() << endl;
 						cin.clear();
 						cin.ignore(10000, '\n');
 					}
+				} else {
+					cout << "Invalid input. Try again: ";
+					cin.clear();
+					cin.ignore(10000, '\n');
 				}
+			}
 				push(pName, pScore, 1);
 				cout << "Record for " << pName << " Successfully updated!...\n";
 			break;
