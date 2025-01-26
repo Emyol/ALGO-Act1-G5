@@ -1,16 +1,3 @@
-/* PROGRESS
-Linklist - add record function
-Priority Queue implementation - added similar max heap funtionality.
-
-TO DO
-Link ARRAY and LINK LIST (goods na ata?)
-DISPLAY DESIGN
-FILE HANDLING (Oks naren ata? I mean pwede lagyan ng design ung pag save sa file pero nag fufunction na)
-ERROR HANDLING for inputs
-
-*/
-
-
 #include <iostream>
 #include <fstream>
 #include <string>
