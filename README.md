@@ -94,10 +94,13 @@ An intelligent system that simulates elevator movement and request handling. Fea
 ---
 
 ### 🤝 **Contributing**
+## **Elevator System Pair**
 - Amiel Acuna - Documentation & Quality Assurance
+- Sean Viacrusis (Leader) - System Designer & Programmer
+## **Leaderboard System Pair**
 - Marcus Austria - Documentation & Quality Assurance
 - Ferdinand Valentino - System Designer & Programmer
-- Sean Viacrusis (Leader) - System Designer & Programmer
+
 
 
 ---
