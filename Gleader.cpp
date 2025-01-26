@@ -22,6 +22,7 @@ const int MAX = 10;
 int LEADScore[MAX]; //array for top 10 leaderboard
 string LEADName[MAX];
 int playerCount = 0;
+int trackUP = 0;
 
 //linked list
 struct Node {
@@ -94,13 +95,16 @@ if(!head){
     	}
 				if(choice == 'Y' || choice == 'y') {
 					verify = true;
+					trackUP = 1;
 				} else if (choice == 'N' || choice == 'n') {
 					verify = false;
+					trackUP = 2;
 					cout << "Returning to main menu...\n";
 					return;
 				} else {
 					cout << "Invalid choice, returning to menu...\n";
 					verify = false;
+					trackUP = 2;
 					return;
 				}
 		}
@@ -288,6 +292,7 @@ void GUI(){
 		choice = toupper(choice);
 		switch (choice){
 			case 'A': {
+				trackUP = false;
 				string pName;
 				int pScore;
 
@@ -311,7 +316,13 @@ void GUI(){
 					}
 				}
 				push(pName, pScore, 0);
+				if (trackUP == 1) {
+				cout << "Record for " << pName << " Successfully updated!...\n";
+				} else if (trackUP == 2) {
+				cout << "Cancelled record update for " << pName << "...\n";
+				} else {
 				cout << "Record for " << pName << " Successfully added!...\n";
+				}
 			break;
 			}
 			case 'B':
