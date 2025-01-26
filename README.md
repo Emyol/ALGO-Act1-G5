@@ -93,10 +93,10 @@ An intelligent system that simulates elevator movement and request handling. Fea
 ---
 
 ### 🤝 **Contributing**
-Amiel Acuna - Documentation & Quality Assurance
-Marcus Austria - Documentation & Quality Assurance
-Ferdinand Valentino - System Designer & Programmer
-Sean Viacrusis - System Designer & Programmer
+- Amiel Acuna - Documentation & Quality Assurance
+- Marcus Austria - Documentation & Quality Assurance
+- Ferdinand Valentino - System Designer & Programmer
+- Sean Viacrusis (Leader) - System Designer & Programmer
 
 
 ---
