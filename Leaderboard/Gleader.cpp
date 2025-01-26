@@ -13,7 +13,7 @@ ERROR HANDLING for inputs
 
 #include <iostream>
 #include <fstream>
-
+#include <string>
 #include <iomanip>
 #include <cctype>
 using namespace std;
