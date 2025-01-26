@@ -324,7 +324,6 @@ void move() {
 
         // Check if Movement (priority queue) is empty, add the front of the Users queue to the priority queue to ready the next target location.
         if (Movement.isEmpty()) {
-                //move to next location
             if (!Users.isEmpty()) {
                 Node* nextUser = Users.front();
                 Movement.enqueue(nextUser->floorlvl);
