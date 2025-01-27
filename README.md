@@ -85,7 +85,7 @@ An intelligent system that simulates elevator movement and request handling. Fea
 ---
 
 ### 📂 **Files in This Repository**
-- `Gleader.cpp`: The primary codebase for both systems.
+- `Gleader.cpp`: File for running the Leaderboard System.
 - `leaderboard.txt`: Stores the top 10 leaderboard entries.
 - `record.txt`: Backup of all player records.
 - `Activity1-ELEVATOR.cpp`: File for running the Elevator System.
