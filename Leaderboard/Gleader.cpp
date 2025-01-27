@@ -273,6 +273,7 @@ void GUI(){
 			} catch (const InvalidInputException &e) {
 				cout << e.what() << endl;
 				cin.ignore(10000, '\n');
+				cout << "Try again: ";
 			}
     	}
 
