@@ -252,7 +252,7 @@ void GUI(){
 		string validInput;
 
 		dSpace();
-		cout << setw(40) << "GAME LEADERBOARDS SYSTEM\n";
+		cout << setw(40) << "HADJI GAMES LEADERBOARDS\n";
 		dSpace();
 		cout <<"A. ADD NEW SCORE\n";
 		cout <<"B. UPDATE EXISTING SCORE\n";
